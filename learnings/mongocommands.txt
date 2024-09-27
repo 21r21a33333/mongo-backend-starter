@@ -1,0 +1,65 @@
+show dbs
+use <databse> //if non existing db is used the new db is created
+show collections
+
+
+db.collectionName.insertOne({
+    key1:"value1",
+    key2:"value2"
+})
+
+
+
+db.collectionName.find()
+db.find({
+    key1:"value1",
+    key2:"value2"
+})
+db.collectionName.find({
+    age:{
+        $gt:18
+    }
+})
+
+
+
+
+db.collectionName.update({searchkey:"searchvalue"},{changekey:"changedvalue"})
+//the original object is replced by {changekey:"changedvalue"} no prev data     
+
+db.collectionName.update({searchkey:"searchvalue"},{$set:{changekey:"changedvalue"}})
+
+
+db.collectionName.deleteOne({searchkey:"searchvalue"})
+
+_______________________________________________________--
+insertOne
+insertMany
+find
+findMany
+updateOne
+updateMany
+deleteOne
+deleteMany
+
+_______________________________
+
+db.collectionName.insertMany([
+    {},{},{}
+])
+
+lessthan,gereater than,equal
+
+db.collectionName.find({name:{$gt:18}});
+
+__________________________________________
+
+projection (selection):
+
+
+db.collectionName.find({key1:"value1"},{key1:1,key2:1})
+--> key1 and key2 columns are displayed
+
+
+db.collectionName.find({key1:"value1"},{key1:0,key2:0})
+--> key1 and key2 columns are omitted all other columns are displayed

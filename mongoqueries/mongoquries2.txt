@@ -1,0 +1,63 @@
+$exist:
+_________
+ṭhis operator is used to check wheather a field exists or not
+ex:
+db.collection_name.find({fieldname:{$exists:true}});
+db.collection_name.find(fieldname:{$exists:true,$eq:"value"});
+
+$type:
+____________
+db.collection_name({"fieldname":{$type:"bool"}}) ->> bool can be replaced by a number describing datatype refer mongo documentation
+
+____________________________________________________________________________________________________________________________________
+                                            addtional operators
+$expr
+it is used evaluate a expression(arthematic operation)
+ex:
+db.collection_name.find({
+    $expr:{
+        $gt:["$field2","$field1"]
+    }
+})
+
+the above query returns all expressions where field2>field1
+ex:
+db.find({
+    $expr:{
+        $gt:[
+            "$field1",
+            {$avg:"field2"}
+        ]
+    }
+})
+
+
+$regex:
+db.collection_name.find({"field":$regex:"/^A/"})-->starts with A
+
+$text:
+this is used to find the text in a indexed coloumns
+ex:
+db.collection_name.find{
+    $text:{
+        $search:"search text"
+    }
+}
+
+indexing and text search:
+->text search is used to search throughout the indexex fields and finds for the described text
+it doesnot requires regular expressions 
+
+1)create index
+2)search useing $search
+
+ex:
+db.collection_name.createIndex({"feildname":"text"}) --> index by text
+
+db.collection_name.find({
+    $text:{
+        $search:"youtube"    ->> this is searched in entire indexed rows to find the search data;
+    }
+})
+
+->>used in search engine , mateched content is displayed

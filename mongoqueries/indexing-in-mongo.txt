@@ -1,0 +1,62 @@
+https://chat.openai.com/share/839287e0-2573-47ca-b0f4-1b2eedaceabe
+
+https://www.youtube.com/watch?v=yo6ZXsgsyBA&list=PLA3GkZPtsafZydhN4nP0h7hw7PQuLsBv1&index=28
+https://docs.google.com/document/d/1KDhuDTmjqnZNyrPNmUivgEsVsxdfFHjKHM-hyAky37Q/edit?addon_store
+
+collscan:
+it is the process through which documents are retrived from the db
+similar to linear search if not indexed 
+
+ixscan:
+scan after indexing 
+
+
+documents are stored in the form of btrees
+and 
+indexing stores :
+indexed keys and pointers to the documents in the colection
+
+
+indexing is optimal for read intesive system while not suitable for write intendive systems
+
+
+types:
+single field index;
+compund field index:
+text indexes
+
+db.colection_name.find().explain()
+-->> applicable only on queries
+-->> i.e explin is applicable on cursor
+
+
+
+single field index:
+db.teachers.createIndex({"age":1})
+db.teachers.getIndexes()
+db.teachers.dropIndexex("name of the index")
+
+
+compound index:
+db.teachers.createIndex({"age":1,"name":1});
+while compound indexing the scan for compund query and for first index is ixscan while the scan for scan for only 2 nd field in collscan
+
+
+options:
+
+db.teachers.createIndex({"age":1},{unique : true})
+db.teachers.createIndex({"age":1},{partialFilterExpression : {age:{$gt:22}}})
+
+
+
+Covered query:
+Only index field is retrieved are entire query is applied on indexed field these are called covered query and they are very efficient
+
+winning plan
+    cache
+
+
+
+multiple key index:
+
+

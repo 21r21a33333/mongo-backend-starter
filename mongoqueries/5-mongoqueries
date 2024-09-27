@@ -1,0 +1,32 @@
+sorting:
+db.collection_name.find().sort({"col1":1})
+db.collection_name.find().sort({"col1":-1})
+db.collection_name.find().sort({"col1":-1,"col2":1})
+
+________________________________----
+                            yet another operators:
+$inc:
+sb.collection_name.updateMany({$inc:{age:2}})  -> increments age by 2
+sb.collection_name.updateMany({$inc:{age:-2}})  -> increments age by 2
+
+
+$max:
+db.collection_name.updateMany({},{$max:{age:50}}) ->> max(50,age)
+
+
+$mul
+db.collection_name.updateMany({},{$mul :{age:5 }}) ->> age*5
+
+
+$unset
+db.collection_name.updateMany({},{$unset :{age:5 }}) ->> removes age field from the document
+
+
+$rename
+db.collection_name.updateMany({},{$rename :{age:"new_age_name" }}) ->> rename document
+
+
+
+https://www.youtube.com/watch?v=N2vaL3Oz--E&list=PLA3GkZPtsafZydhN4nP0h7hw7PQuLsBv1&index=27
+
+

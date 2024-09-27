@@ -1,0 +1,231 @@
+document size limit is 16mb;
+keys can be enclose in double quotes or may not no worries
+______________________________
+show dbs
+use new_dbname --> new database is created
+db.creteCollection("collection_name");
+db.collection_name --> creates new collection is not exist
+db.new_dbname.insetOne({
+    name:"user1",
+    age="18"
+})
+
+db.collection_name.find()
+
+db.updateOne({name:"user1"},
+            {$set:{ 
+                additional_details:{     ->>>>>$set is essentials it appends of modify data rather than clearing remainingdata
+                    aadhar:"12423423",
+                    pancard:"132123"
+}}})
+
+db.updateMany({},{
+    $set:{
+        hoobies:[
+            "anime",
+            "cooking"
+        ]
+    }
+})
+
+//arrays
+db.collection_name.find({hoobies:"anime"}) ---> mongo searcched through arrays as well
+db.collection_name.find({hoobies:"anime"}).count()
+
+//nested objects
+
+db.collection_name.find({"additional_details.aadhar" : "12341234"}) --> we use dot operator -->quotes are important
+
+____________________________________________________________________________________________________________________________________
+                                                CRUD OPERATION:
+insertOne,insertMany()
+find(),findOne()
+updateMany(),updateOne(),replaceOne()
+deleteOne().deleteMany()
+____________________________________________________________________________________________________________________________________
+db.collection_name.findOne({name:"user1"})        ->returns single docuement
+db.collection_name.find({name:"user1"})    ->returns array 
+
+find initially displays only minimal documents if i need more type "it" 
+or simplt use forEach
+-->find returns cursor
+
+additonal method on returned array:
+db.collection_name.find()
+db.collection_name.find().toArray() -->> displays all elements
+db.collection_name.find().count()
+db.collection_name.find().forEach((x)=>{printjson(x)})
+db.collection_name.find().limit(2)
+db.collection_name.find().skip(2).limit(2)
+
+
+conditions:
+db.collection_name.find(age:{ $lt : 12 })
+db.collection_name.find(age:{ $lte : 12 })
+db.collection_name.find(age:{ $gt : 12 })
+db.collection_name.find(age:{ $gte : 12 })
+db.collection_name.find(age:{ $gte : 12 , $lte : 18 })  -->> and
+
+array search:
+____________
+db.favoriteColor.find({
+  color: {
+    $all: ["orange", "red"]
+  }
+})
+and conditon on array elements
+db.data.find({
+  arrayField: {
+    $elemMatch: {
+      $gt: 20,
+      $lt: 30
+    }
+  }
+});
+____________________________________________________________________________________________________________________________________
+db.new_dbname.insertOne({
+    name:"user1",
+    age="18"
+})
+db.new_dbname.insertMany([
+    {
+    name:"user1",
+    age="18"
+    },
+    {
+    name:"user1",
+    age="18"
+    }
+])
+____________________________________________________________________________________________________________________________________
+db.updateOne({name:"user1"},
+            {$set:{ 
+                additional_details:{     ->>>>>$set is essentials it appends of modify data rather than clearing remainingdata
+                    aadhar:"12423423",
+                    pancard:"132123"
+}}})
+db.updateMany({age:{$gt:12}},
+            {$set:{ 
+                additional_details:{     ->>>>>$set is essentials it appends of modify data rather than clearing remainingdata
+                    aadhar:"12423423",
+                    pancard:"132123"
+}}})
+
+db.users.updateMany(
+  { username: "john_doe" },
+  { $push: { friends: { $each: ["Jane", "Alice"] } } }
+);
+--->if the field in set is not available in the document the new field is added 
+
+
+options:
+db.collection_name.updateOne({name:"username"},{$set:{age:65}},{upsert:true})
+____________________________________________________________________________________________________________________________________
+
+db.collection_name.delete({age:10})
+db.collection_name.deleteMany({age:{$gt:18}})
+db.collection_name.deleteMany({})
+____________________________________________________________________________________________________________________________________
+                                            PROJECTION(options)
+db.collection_name.find({name:"ram"},{name:1,rollno:1,_id:0})
+____________________________________________________________________________________________________________________________________
+-->> we need to maintain an application level schema to maintain consistence in the database
+
+____________________________________________________________________________________________________________________________________
+                                                DATATYPES
+text
+boolean
+objectid
+isodate
+timestamp
+array
+embedded object
+array
+number
+    integers(32)
+    number long(64)
+    number decimal(64)
+
+
+->> check datatype of object using typeof operatore
+    typeof db.collection.name
+____________________________________________________________________________________________________________________________________
+                                                    DROP collection DROP database
+db.dropdatabase()
+db.collection_name.drop()
+____________________________________________________________________________________________________________________________________
+                                                   INSERT options
+while insert user can specify the userdefined _id,
+while inserting same id may raise conflict 
+options are used to provide additional information todo.
+
+                                                ordered:false
+ex:
+db.collection_name.insertMany([{_id:"A",name:"user1"},{_id:"B",name:"user1"},{_id:"A",name:"user1"}{_id:"D",name:"user1"}])
+_id : A,B are inserted while other after repeated A are ignored
+thus we use options
+db.collection_name.insertMany([{_id:"A",name:"user1"},{_id:"B",name:"user1"},{_id:"A",name:"user1"}{_id:"D",name:"user1"}]
+    {ordered:false}) -->> error occurs but all a,b, and d aswell id inserted 
+______________________________
+                                                write concern
+{w:<value> ,j:<boolean> ,wtimeout:<number>}
+
+w--it is used tell wheather to give any accknowledgement or not
+j-- it indicates the entry in the journal this is used in recovery of transaction while a point of failure
+wtimeout--it is used to indicate perform an opertion if reside in time bound described in wtimeout else return error
+
+ex:
+db.collection_name.insertone({name:"user1"},{writeconcern:{w:0}})
+
+
+____________________________________________________________________________________________________________________________________
+validations:
+
+db.creteCollection("collection_name",{
+    validator:{
+        $jsonSchema:{
+            required:['name','price'],
+            properties:{
+                name:{
+                    bsonType:"string",
+                    description:"must be a string"
+                },
+                price:{
+                    bsonType:"number",
+                    description:"must be a string"
+                }
+            }
+        }
+    },
+    validationAction:'warn'    ->>'error' can also be used warn logs are stored in log file in mongodb folder in system we installed
+})
+
+
+for modifing the already present validatoions refer:
+https://www.youtube.com/watch?v=6Cv7ihA4388&list=PLA3GkZPtsafZydhN4nP0h7hw7PQuLsBv1&index=16
+
+____________________________________________________________________________________________________________________________________
+                                                ATOMICITY
+MONGO PROVIDE ATOMICITY ON DOCUMENT level
+EVERY IS transaction IS EITHER COMPLETE OR FAILED COMPLETE NO PARTIALLY COMMITED transaction
+IN INSERT MANY AS WELL THE INDIVIDUL DOCUMENT IS ATOMIC WHILE EVERY transaction IS NOT ATOMIC
+____________________________________________________________________________________________________________________________________
+                                                COMPARISISON OPERTIONS
+$eq
+$ne
+$lt
+$lte
+$gt
+$gte
+$in   -> db.collection_name.find({age:{$in:[12,34,55]}})
+$nin    ->
+____________________________________________________________________________________________________________________________________
+                                                logical OPERTIONS takes a list of conditions
+$not    ->db.collection_name.find($not { age : { $gt : 12 }})
+$and   ->db.collection_name.find({ $and : [{age:{$gt:10}},{age:{$lte:18}}]})
+$or  ->db.collection_name.find({ $or : [{age:{$gt:10}},{age:{$lte:18}}]})
+$nor ->db.collection_name.find({ $nor : [{age:{$gt:10}},{age:{$lte:18}}]})
+____________________________________________________________________________________________________________________________________
+
+
+

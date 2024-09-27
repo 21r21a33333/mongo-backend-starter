@@ -1,0 +1,69 @@
+db.collection_name.find({"array_field":"fieldvalue"})
+for array of objects
+db.collection_name.find({"array_field.objectkey":"fieldvalue"})
+
+
+$size:
+______________________________
+db.collection_name.find({
+    "array_field":{
+        $size:3
+    }
+})
+
+we cannot give expression in size fields only numbers are allowed
+
+
+to tackle above situaiton we use expr query:
+ex:
+db.collection_name.find({
+    $expr:{
+        &gt:[
+            {
+                $size:"$experience"
+            },
+            3
+        ]
+    }
+})
+
+
+for assurance that the experience feild exists:
+db.collection_name.find({
+    $and:[
+        feildname:{$exist:true},
+        $expr:{
+            $gt:[
+                {$size:"experience"},
+                3
+            ]
+        }
+    ]
+})
+
+
+
+
+
+$all:
+______________________________
+if i query:
+db.collection_name.find("array_feild":["element1","element2"]) ->> return docs with array_feild=["element1","element2"] order is important it does not return doc if the order is not is specified way 
+
+thus use $all
+db.collection_name({
+    "array_feild":{$all:["element1","element2"]}
+})
+
+
+
+$elemMatch-->> this is essential if we want the specified condition is always to be in single feild of array
+______________________________
+
+ex:
+db.collection_name.find({
+    $elemMatch{
+        quantity:{$gt:15},
+        name:"apple",
+    }
+})

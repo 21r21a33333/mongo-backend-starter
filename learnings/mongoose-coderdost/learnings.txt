@@ -1,0 +1,70 @@
+mongoose is odm -object data model
+
+-->it maps js objects with database documents
+uses:
+type casting 
+validations 
+queries 
+
+
+mongoose schema:
+used in type checking
+
+__
+mongoose.Schema({
+    name:type,
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        validate: {
+            validator: function(v) {
+                // Regular expression for email validation
+                return /\S+@\S+\.\S+/.test(v);
+            },
+            message: props => `${props.value} is not a valid email address!`
+        }
+    },
+})
+
+some validations:
+default:
+min,max:
+validate:
+maxlength
+required:
+unique:
+
+
+_______________________________
+27027 - default port
+const mongoose=require("mongoose");
+mongoose.connect("mongodb://localhost:27017/database",{useNewUrlParser:true});
+
+
+_______________________________
+schemas:
+
+const userschema=mongoose.Schema({
+    schema
+})
+
+const User=mongoose.model("user",userschema);
+__________________________________________
+User.find({})->> allows all native mongo db queries
+uses.findOne({})->>
+
+User.findOneAndUpdate({findkey_value},{updates })
+
+User.findOneAndUpdate(
+    { username: 'john_doe' }, // Filter criteria
+    { username: 'jane_doe', email: 'jane@example.com' }, // New document
+    { overwrite: true, new: true } // Options: overwrite and new
+)
+
+_>> overwrite flag is used to overwrite the object in db
+
+->> new returns new document
+
+
+User.findOneAndDelete({username: 'john_doe'})
